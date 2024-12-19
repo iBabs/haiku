@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { login} from "../actions/userControllers";
-import { useFormState,useActionState} from "react-dom";
+import { useFormState} from "react-dom";
 import Link from "next/link";
 
 export default function Login() {
   const [show, setShow] = useState(false);
   const [formState, formAction] = useFormState(login, {});
+
+  // console.log(formState);
+
+
   return (
     <div className="min-h-[550px] flex flex-col justify-center items-center">
         <h2>LOGIN</h2>

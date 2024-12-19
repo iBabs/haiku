@@ -3,12 +3,14 @@ import { getUser } from "./lib/getUser";
 
 export default async function Home() {
   const user = await getUser();
+  
+  console.log(user, "on page")
 
   return (
     <>
       {user && (
         <p className="text-center my-10 text-amber-500">
-          Welcome, You are logged in as {user.email}
+          Welcome, You are logged in as {user.user.email}
         </p>
       )}
 
