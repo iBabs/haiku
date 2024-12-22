@@ -4,6 +4,13 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { register } from "../actions/userControllers";
 import { useFormState, useFormStatus } from "react-dom";
 
+
+
+export const metadata = {
+  title: "Register",
+  description: "Register to Haiku",
+};
+
 export default function Register() {
   const [show, setShow] = useState(false);
   const [formState, formAction] = useFormState(register, {});

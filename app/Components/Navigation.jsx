@@ -10,22 +10,15 @@ export default async function Navigation() {
     <>
       <div className="navbar bg-base-100">
         <div className="flex-1">
-          <Link href="/" className="btn btn-ghost text-xl">
+          <Link href="/" className="btn btn-ghost sm:text-xl">
             HAIKU<span className="text-pink-400">WEEKEND</span>
           </Link>
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu sm:menu-horizontal px-1">
             {user && (
               <>
                 {" "}
-                <li>
-                <button 
-                onClick={logout}
-                className="btn btn-neutral">
-                  LOG-OUT
-                </button>
-                </li>
                 <li>
                   <details>
                     <summary>Parent</summary>
@@ -38,16 +31,16 @@ export default async function Navigation() {
                       </li>
                     </ul>
                   </details>
+                </li>{" "}
+                <li className="flex gap-1 sm:flex-row  items-center bg-primary-content rounded-lg p-2">
+                  <p>{user.user.email}</p>
+                  <button onClick={logout} className="btn btn-neutral">
+                    LOG-OUT
+                  </button>
                 </li>
               </>
             )}
-            {!user && (
-              <Link
-              href='/login'
-              >
-              LOG IN
-              </Link>
-            )}
+            {!user && <Link href="/login">LOG IN</Link>}
           </ul>
         </div>
       </div>

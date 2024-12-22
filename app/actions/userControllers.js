@@ -63,7 +63,7 @@ export const login = async (previousState, formData) => {
             loading: loading
         }
     }
-    console.log(userExists, "this is the user")
+    // console.log(userExists, "this is the user")
 
     const token = jwt.sign({ userId: userExists._id }, process.env.JWT_SECRET, {
         expiresIn: "7d"
@@ -148,7 +148,7 @@ export const register = async (previousState, formData) => {
 
     //storing cookies
     const cookiesStore = await cookies()
-    cookiesStore.set("haikuweekend", token,  {
+    cookiesStore.set("haikuweekend", encodeURIComponent(JSON.stringify({token, userExists})),  {
         httpOnly: true,
         sameSite: "strict",
         maxAge: 60 * 60 * 24 * 7,

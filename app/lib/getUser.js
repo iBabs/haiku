@@ -10,7 +10,7 @@ export const getUser = async (req) => {
         try {
             const userToken = JSON.parse(decodeURIComponent(cookieToken)).token
             const decoded =  jwt.verify(userToken, process.env.JWT_SECRET);
-            console.log(JSON.parse(decodeURIComponent(cookieToken)).userExists, "this is the user")
+            // console.log(JSON.parse(decodeURIComponent(cookieToken)).userExists, "this is the user")
             return {decoded, user: JSON.parse(decodeURIComponent(cookieToken)).userExists};
         } catch (err) {
             console.log(err)
