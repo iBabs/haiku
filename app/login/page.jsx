@@ -8,9 +8,11 @@ import Link from "next/link";
 
 
 
-export const metadata = {
-  title: "Login",
-  description: "Login to Haiku",
+export const createMataData = async () => {
+  return {
+    title: "Login",
+    description: "Login to your account",
+  };
 };
 
 export default function Login() {
