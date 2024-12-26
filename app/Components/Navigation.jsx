@@ -5,7 +5,7 @@ import { logout } from "../actions/userControllers";
 
 export default async function Navigation() {
   const user = await getUser();
-  console.log(user)
+  
 
   return (
     <>
