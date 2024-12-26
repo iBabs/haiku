@@ -5,7 +5,6 @@ import { getUser } from "../lib/getUser";
 import { redirect } from "next/navigation";
 import HaikuCard from "../Components/HaikuCard";
 
-
 export const metadata = {
   title: "Haikus",
   description: "A simple haiku generator",
@@ -19,16 +18,19 @@ async function getHaiku(id) {
     .sort()
     .toArray();
 
-  return result;
+  return result.map((haiku) => ({
+    ...haiku,
+    _id: haiku._id.toString(),
+    userId: haiku.userId.toString(),
+  }));
 }
 
 export default async function Haiku() {
   const user = await getUser();
 
-  if(!user){
-    return redirect('/')
-  }
-
+  if (!user) {
+    return redirect("/");
+  } 
   const haiku = await getHaiku(user.user._id);
   return (
     <div className="h-dvh overflow-auto space-y-4 px-4">
@@ -37,7 +39,8 @@ export default async function Haiku() {
       </h1>
 
       <div className="flex flex-col justify-center  space-y-3">
-        {haiku.reverse().map((haiku, index) => (<HaikuCard key={index} haiku={haiku}/>
+        {haiku&&haiku.reverse().map((haiku, index) => (
+          <HaikuCard key={index} haiku={haiku} />
         ))}
       </div>
     </div>

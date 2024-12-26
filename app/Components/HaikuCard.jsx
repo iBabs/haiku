@@ -8,23 +8,20 @@ import { deleteHaiku } from "../actions/haikuController";
 import { CldImage } from "next-cloudinary";
 
 export default function HaikuCard({ haiku }) {
-  if(!haiku.image){
-    haiku.image ="fallback"
-  }
-
+ 
 
   return (
     <div className="rounded overflow-hidden relative shadow-lg mx-auto max-w-2xl group my-3">
-      {/* <img src="/aspect" alt="" /> */}
+      <img src="/aspect-ratio.png" alt="" />
       <div
       className="absolute inset-0 bg-gray-200 grid">
         <span className="loading loading-dots loading-lg m-auto"></span>
       </div>
       <CldImage
         className="absolute inset-0"
-        width="672"
+        width="650"
         height="300"
-        src={haiku?.image}
+        src={haiku?.image || "/istockphoto-610041376-1024x1024_jhzipe.jpg"}
         crop={{ type: "pad", source: "auto" }}
         fillBackground
         sizes="300px"
@@ -38,7 +35,7 @@ export default function HaikuCard({ haiku }) {
               gravity: "north_west",
             },
             text: {
-              text: `${haiku.line1}%0A${haiku.line2}%0A${haiku.line3}`,
+              text: encodeURIComponent(`${haiku.line1}\n${haiku.line2}\n${haiku.line3}`),
               fontFamily: "Arial",
               fontSize: 42,
               fontWeight: "bold",
@@ -67,17 +64,17 @@ export default function HaikuCard({ haiku }) {
       
         <div className="flex justify-center items-center gap-5 opacity-100 absolute right-2 bottom-2 sm:opacity-0 group-hover:opacity-100">
           <Link href={`/haikus/${haiku._id}`}>
-            <CiEdit className="text-2xl text-white" />
+            <CiEdit className="text-3xl text-white bg-gray-600/50 rounded p-2 transition hover:text-slate-200" />
           </Link>
 
-          <form action={deleteHaiku}>
+          <form action={deleteHaiku} className="flex items-center gap-5">
             <input
               type="hidden"
               name="id"
               defaultValue={haiku._id.toString()}
             />
             <button>
-              <RiDeleteBin6Fill className="text-2xl text-white" />
+              <RiDeleteBin6Fill className="text-3xl text-white bg-gray-600/50 rounded p-2 transition hover:text-slate-200" />
             </button>
           </form>
         </div>
