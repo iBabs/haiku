@@ -10,14 +10,17 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
     "daisyui": "^4.12.21",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.12.0",
     "mustfinish": "file:",
     "next": "15.1.0",
+    "next-cloudinary": "^6.16.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.4.0"
+    "react-icons": "^5.4.0",
+    "react-toastify": "^11.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

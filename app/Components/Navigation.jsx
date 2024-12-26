@@ -19,18 +19,9 @@ export default async function Navigation() {
             {user && (
               <>
                 {" "}
-                <li>
-                  <details>
-                    <summary>Parent</summary>
-                    <ul className="bg-base-100 rounded-t-none p-2">
-                      <li>
-                        <Link href="#">Link 1</Link>
-                      </li>
-                      <li>
-                        <Link href="#">Link 2</Link>
-                      </li>
-                    </ul>
-                  </details>
+                <li className="flex flex-col sm:flex-row gap-2 ">
+                 <Link href="/create-haiku" className="btn btn-primary">CREATE HAIKU</Link>
+                 <Link href='/haikus' className="btn btn-accent">HAIKUS</Link>
                 </li>{" "}
                 <li className="flex gap-1 sm:flex-row  items-center bg-primary-content rounded-lg p-2">
                   <p>{user.user.email}</p>

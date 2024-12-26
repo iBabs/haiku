@@ -2,29 +2,31 @@
 import { useState } from "react";
 import { haikuControler, editHaiku } from "../actions/haikuController";
 import { useFormState, useFormStatus } from "react-dom";
+import { CldUploadWidget } from "next-cloudinary";
 
 export default function HaikuForm(props) {
-
-
-
-let mainAction
-if(props.action === "edit"){
-  mainAction = editHaiku
-}
-if(props.action === "create"){
-  mainAction = haikuControler
-}
-
+  let mainAction;
+  if (props.action === "edit") {
+    mainAction = editHaiku;
+  }
+  if (props.action === "create") {
+    mainAction = haikuControler;
+  }
 
   const [formState, formAction] = useFormState(mainAction, {});
-
-
+  const { pending } = useFormStatus();
+  const [public_id, setPublicId] = useState("");
+  const [signature, setSignature] = useState("");
+  const [version, setVersion] = useState("");
 
   // console.log(formState);
 
   return (
     <div>
-      <form action={formAction} className="max-w-xs mx-auto space-y-4 bg-neutral-800 p-5 rounded-lg shadow-md shadow-neutral-900">
+      <form
+        action={formAction}
+        className="max-w-xs mx-auto space-y-4 bg-neutral-800 p-5 rounded-lg shadow-md shadow-neutral-900"
+      >
         <div>
           <label htmlFor="line1">Line 1:</label>
           <input
@@ -87,18 +89,17 @@ if(props.action === "create"){
         </div>
         <div>
           <label htmlFor="password">Line 3:</label>
-          
-            <input
-              autoComplete="false"
-              type="text"
-              name="line3"
-              id="text"
-              defaultValue={props.haiku?.line3}
-              placeholder="line 3"
-              className=" w-full outline-none input input-bordered "
-            />
-            
-          
+
+          <input
+            autoComplete="false"
+            type="text"
+            name="line3"
+            id="text"
+            defaultValue={props.haiku?.line3}
+            placeholder="line 3"
+            className=" w-full outline-none input input-bordered "
+          />
+
           {formState.errors?.line3 && (
             <div role="alert" className="alert alert-warning mt-1">
               <svg
@@ -118,13 +119,52 @@ if(props.action === "create"){
             </div>
           )}
         </div>
-        <input type="hidden"
-        name="haikuId"
-        id="haikuId"
-        defaultValue={props.haiku?._id.toString()} />
-        <button 
-        type="submit"
-        className="btn btn-secondary w-full capitalize">{props.action} Haiku</button>
+        <div className="mb-3">
+          <label htmlFor="image">Image:</label>
+          <CldUploadWidget 
+          onSuccess={(result, {widget})=>{
+            // console.log(result.info)
+            setPublicId(result.info?.public_id);
+            setSignature(result.info?.signature);
+            setVersion(result.info?.version);
+          }}
+          onQueuesEnd={(result, {widget})=>{
+            widget.close();
+          }}
+          signatureEndpoint="/cloudinary-sign">
+            {({ open }) => {
+              return <button 
+              type="button"
+              className="btn btn-info w-full capitalize"
+              onClick={() => open()}>Upload an Image</button>;
+            }}
+          </CldUploadWidget>
+        </div>
+
+        <input
+          type="hidden"
+          name="haikuId"
+          id="haikuId"
+          defaultValue={props.haiku?._id.toString()}
+        />
+        <input
+        type="hidden"
+        name="public_id"
+        value={public_id}
+        />
+        <input
+        type="hidden"
+        name="signature"
+        value={signature}
+        />
+        <input
+        type="hidden"
+        name="version"
+        value={version}
+        />
+        <button type="submit" className="btn btn-secondary w-full capitalize">
+         {pending? "loading..":`${props.action} Haiku`} 
+        </button>
       </form>
     </div>
   );

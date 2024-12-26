@@ -17,7 +17,7 @@ export default async function page() {
   }
 
   return (
-    <div className='h-dvh flex-auto flex flex-col justify-center items-center space-y-4'>
+    <div className='min-h-dvh flex-auto flex flex-col justify-center items-center space-y-4'>
       <h2 className='text-center text-4xl font-atma text-cyan-500'>Create an Haiku</h2>
     <p>Fill in the form to input the appropriate things to create your Haiku</p>
         <HaikuForm action="create"/>

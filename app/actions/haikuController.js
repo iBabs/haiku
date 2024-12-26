@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb"
 import { getUser } from "../lib/getUser"
 import { redirect } from "next/navigation"
 import { getCollection } from "../lib/db";
+import { v2 as cloudinary } from "cloudinary"
 
 
 
@@ -11,8 +12,14 @@ const isAlphanumeric = (str) => {
     return /^[a-zA-Z0-9 ,.]*$/.test(str);
 }
 
+const cloudConfig = cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 async function shareLogic(formData, user) {
+    console.log(formData.get("public_id"), formData.get("version"), formData.get("signature"))
 
     const errors = {}
     const haiku = {
@@ -30,6 +37,16 @@ async function shareLogic(formData, user) {
     if (haiku.line1.length === 0) errors.line1 = "Line 1 is required"
     if (haiku.line2.length === 0) errors.line2 = "Line 2 is required"
     if (haiku.line3.length === 0) errors.line3 = "Line 3 is required"
+
+    const expectedSignature = cloudinary.utils.api_sign_request({ public_id:formData.get("public_id"), version: formData.get("version") }, process.env.CLOUDINARY_API_SECRET)
+
+    if(expectedSignature === formData.get("signature")) {
+        haiku.image = formData.get("public_id")
+    } else {
+        errors.image = "Image upload failed"
+    }
+
+    console.log(haiku.image)
 
     haiku.line1 = haiku.line1.replace(/(\r\n|\n|\r)/g, ' ').trim()
     haiku.line2 = haiku.line2.replace(/(\r\n|\n|\r)/g, ' ').trim()
@@ -60,6 +77,7 @@ async function shareLogic(formData, user) {
 }
 
 
+//create haiku
 
 export const haikuControler = async (previousState, formData) => {
 
@@ -83,6 +101,8 @@ export const haikuControler = async (previousState, formData) => {
 
 }
 
+//delete haiku
+
 export const deleteHaiku = async (formData) => {
 
     const user = await getUser()
@@ -90,19 +110,20 @@ export const deleteHaiku = async (formData) => {
     if (!user) {
         return redirect('/')
     }
-    const sure = window.confirm("Are you sure you want to delete this haiku?")
-    if(!sure){
-        return redirect('/haikus')
-    }
     const haikusCollection = await getCollection("haikus")
+    let id = formData.get("id")
 
-    const haikuOwner = await haikusCollection.findOne({ _id: ObjectId.createFromHexString(formData.get("haikuId")) })
+    if (typeof id !== "string") {
+        id = ""
+    }
 
-    if(haikuOwner.userId.toString() !== user.user._id){
+    const haikuOwner = await haikusCollection.findOne({ _id: ObjectId.createFromHexString(id) })
+
+    if (haikuOwner.userId.toString() !== user.user._id) {
         return redirect('/haikus')
     }
 
-    const haiku = await haikusCollection.deleteOne({ _id: ObjectId.createFromHexString(formData.get("haikuId")) })
+    const haiku = await haikusCollection.deleteOne({ _id: ObjectId.createFromHexString(formData.get("id")) })
 
     return redirect('/haikus')
 
@@ -124,9 +145,15 @@ export const editHaiku = async (previousState, formData) => {
     }
     const haikusCollection = await getCollection("haikus")
 
-    const haikuOwner = await haikusCollection.findOne({ _id: ObjectId.createFromHexString(formData.get("haikuId")) })
+    let id = formData.get("haikuId")
 
-    if(haikuOwner.userId.toString() !== user.user._id){
+    if (typeof id !== "string") {
+        id = ""
+    }
+
+    const haikuOwner = await haikusCollection.findOne({ _id: ObjectId.createFromHexString(id) })
+
+    if (haikuOwner.userId.toString() !== user.user._id) {
         return redirect('/haikus')
     }
 
