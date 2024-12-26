@@ -5,6 +5,7 @@ import { logout } from "../actions/userControllers";
 
 export default async function Navigation() {
   const user = await getUser();
+  console.log(user)
 
   return (
     <>
@@ -24,7 +25,7 @@ export default async function Navigation() {
                  <Link href='/haikus' className="btn btn-accent">HAIKUS</Link>
                 </li>{" "}
                 <li className="flex gap-1 sm:flex-row  items-center bg-primary-content rounded-lg p-2">
-                  <p>{user.user.email}</p>
+                  <p>{user.user?.email}</p>
                   <button onClick={logout} className="btn btn-neutral">
                     LOG-OUT
                   </button>

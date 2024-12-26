@@ -141,10 +141,16 @@ export const register = async (previousState, formData) => {
     const newUser = await usersCollection.insertOne(user)
     const userId = newUser.insertedId
 
+    // console.log(newUser)
     //creating jwt token
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
         expiresIn: "7d"
     })
+    // finding user to store in cookies
+    const userExists = await usersCollection.findOne({ _id: userId })
+    if( !userExists) {
+        throw new Error("Failed to fetch user info")
+    }
 
     //storing cookies
     const cookiesStore = await cookies()
