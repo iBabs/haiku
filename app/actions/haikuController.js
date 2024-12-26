@@ -57,13 +57,13 @@ async function shareLogic(formData, user) {
     haiku.line3 = haiku.line3.trim()
 
     if (haiku.line1.length < 5) errors.line1 = "Line 1 must be at least 5 characters long";
-    if (haiku.line1.length > 25) errors.line1 = "Line 1 must be less than 25 characters long";
+    if (haiku.line1.length > 35) errors.line1 = "Line 1 must be less than 35 characters long";
 
     if (haiku.line2.length < 7) errors.line2 = "Line 2 must be at least 7 characters long";
-    if (haiku.line2.length > 35) errors.line2 = "Line 2 must be less than 35 characters long";
+    if (haiku.line2.length > 50) errors.line2 = "Line 2 must be less than 50 characters long";
 
     if (haiku.line3.length < 5) errors.line3 = "Line 3 must be at least 5 characters long";
-    if (haiku.line3.length > 25) errors.line3 = "Line 3 must be less than 25 characters long";
+    if (haiku.line3.length > 35) errors.line3 = "Line 3 must be less than 35 characters long";
 
     if (!isAlphanumeric(haiku.line1)) errors.line1 = "Line 1 must be alphanumeric"
     if (!isAlphanumeric(haiku.line2)) errors.line2 = "Line 2 must be alphanumeric"
